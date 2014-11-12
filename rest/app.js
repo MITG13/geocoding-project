@@ -1,58 +1,91 @@
 'use strict';
 
+var fs = require('fs');
 var express = require('express');
 var app = express();
 
 app.set('json spaces',4);
 
+
+
+
+
 app.get('/', function (req, res, next) {
-    var info = {
+    var responseJSON = {
         "requests": [
             {
+                "url": "/",
+                "request_types": ["get"],
+                "params": {
+
+                }
+            },
+            {
                 "url": "/getGeoCodingProviders",
-                "type": "get",
+                "request_types": ["get"],
                 "params": {
 
                 }
             },
             {
                 "url": "/getCoords",
-                "type": "post",
+                "request_types": ["get", "post"],
                 "params": {
                     "provider": "PROVIDER",
                     "": ""
-                },
-                "response": {
-
                 }
             },
             {
                 "url": "/getAddress",
-                "type": "post",
+                "request_types": ["get", "post"],
                 "params": {
                     "provider": "PROVIDER",
                     "geometry": {
                         "type": "Point",
                         "coordinates": ["X", "Y"]
                     }
-                },
-                "response": {
-
                 }
             }
         ]
     };
 
-    res.json(info);
+    res.json(responseJSON);
     next();
 });
 
-app.get('/id', function (req, res, next) {
-    res.send('Which ID?');
+app.get('/getGeoCodingProviders', function (req, res, next) {
+    var responseJSON = {
+        "providers": [
+            {
+                "name": "Google",
+                "options": {}
+            },
+            {
+                "name": "Bing",
+                "options": {}
+            },
+            {
+                "name": "HERE",
+                "options": {}
+            }
+        ]
+    };
+
+    res.json(responseJSON);
     next();
 });
-app.get('/id/:id', function (req, res, next) {
-    res.send('ID: ' + req.params.id);
+app.use('/getCoords', function (req, res, next) {
+    var responseJSON = {
+
+    };
+    res.json(responseJSON);
+    next();
+});
+app.use('/getAddress', function (req, res, next) {
+    var responseJSON = {
+
+    };
+    res.json(responseJSON);
     next();
 });
 
