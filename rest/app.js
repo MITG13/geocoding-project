@@ -3,8 +3,47 @@
 var express = require('express');
 var app = express();
 
+app.set('json spaces',4);
+
 app.get('/', function (req, res, next) {
-    res.send('Hello World! You could request GET /id and GET /id/:id');
+    var info = {
+        "requests": [
+            {
+                "url": "/getGeoCodingProviders",
+                "type": "get",
+                "params": {
+
+                }
+            },
+            {
+                "url": "/getCoords",
+                "type": "post",
+                "params": {
+                    "provider": "PROVIDER",
+                    "": ""
+                },
+                "response": {
+
+                }
+            },
+            {
+                "url": "/getAddress",
+                "type": "post",
+                "params": {
+                    "provider": "PROVIDER",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": ["X", "Y"]
+                    }
+                },
+                "response": {
+
+                }
+            }
+        ]
+    };
+
+    res.json(info);
     next();
 });
 

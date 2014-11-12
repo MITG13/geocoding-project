@@ -14,5 +14,8 @@
   "homepage": "https://github.com/MITG13/geocoding-project",
   "dependencies": {
     "express": "^4.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.2.1"
   }
 }
