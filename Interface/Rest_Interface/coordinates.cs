@@ -12,9 +12,13 @@ namespace GeoCodingInterface
         public float lat { get; set; }
         public float lon { get; set; }
     
-    public coordinates() 
-    { 
-    }
+        public coordinates() { }
+
+        public coordinates(codingResponse inputItem)
+        {
+            lat = inputItem.latlng.lat;
+            lon = inputItem.latlng.lon;
+        }
 
     }
 
@@ -29,18 +33,5 @@ namespace GeoCodingInterface
 
     }
 
-    public class codedAddress
-    {
-        public float latitude { get; set; }
-        public float longitude { get; set; }
-
-        public codedAddress() { }
-
-        public codedAddress(codingResponse inputItem)
-        {
-            latitude = inputItem.latlng.lat;
-            longitude = inputItem.latlng.lon;
-        }
-
-    }
+    
 }
