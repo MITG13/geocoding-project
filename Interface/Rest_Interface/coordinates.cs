@@ -23,14 +23,9 @@ namespace GeoCodingInterface
     }
 
 
-    public class codingResponse : List<coordinates>
+    class codingResponse : List<coordinates>
     {
         public coordinates latlng { get; set; }
-    }
-
-    public class latlng : IRestResponse<codingResponse>
-    {
-
     }
 
     

@@ -20,13 +20,10 @@ namespace GeoCodingInterface
 
     }
 
-    public class serviceResponse
+    class serviceResponse : List<service>
     {
         public List<service> service { get; set; }
     }
 
-    public class services : IRestResponse<serviceResponse> 
-    {
-    
-    }
+
 }

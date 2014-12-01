@@ -18,8 +18,4 @@ namespace GeoCodingInterface
         public string housenumber { get; set; } 
     }
 
-   
-
-   
-
 }
