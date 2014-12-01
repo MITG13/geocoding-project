@@ -32,7 +32,7 @@ namespace Shape_Plugin
             //return "Shape Plugin works";
         }
 
-        public static DataTable import_Shape(string path)
+        public static DataTable import(string path)
         {
             try
             {
@@ -54,44 +54,38 @@ namespace Shape_Plugin
             
         }
 
-        public static void export_Shape(DataTable table, string save_path)
+        public static void export(DataTable table, string save_path)
         {
             try
             {
                 // define the feature type for this file
                 FeatureSet fs = new FeatureSet(FeatureType.Point);
 
-
                 // Add Some Columns
                 // get Column Names from (DataTable)table
                 // Test Case:
-                fs.DataTable.Columns.Add(new DataColumn("ID", typeof(int)));
-                fs.DataTable.Columns.Add(new DataColumn("Text", typeof(string)));
-
-                // create a geometry (Point)
-                // get x and y coodrinates from (DataTable)table
-                double x = 14.23;
-                double y = 47.234;
-                Coordinate coordinate = new Coordinate(x,y);
-                Point geom = new Point(coordinate);
-                //Polygon geom = new Polygon(vertices);
-
-                // add the geometry to the featureset. 
-                IFeature feature = fs.AddFeature(geom);
-
-                // now the resulting features knows what columns it has
-                // add values for the columns
-                // following code is for testing
-                feature.DataRow.BeginEdit();
-                feature.DataRow["ID"] = 1;
-                feature.DataRow["Text"] = "Hello World";
-                feature.DataRow.EndEdit();
-
-
-                // save the feature set
-                // Option 1: give absolut path
+                foreach (DataColumn item in table)
+                {
+                    fs.DataTable.Columns.Add(item);
+                }
+                fs.DataTable.Columns.Add("geom", typeof(Point));
+                foreach (DataRow item in table)
+	            {
+                    // get x and y coodrinates from (DataTable)table
+                    Coordinate coordinate = new Coordinate(item["x"], item["y"]);
+                    Point geom = new Point(coordinate);
+                    IFeature feature = fs.AddFeature(geom);
+                    feature.DataRow.BeginEdit();
+                    //is geom index 0 or last index????
+                    for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                    {
+                        feature.DataRow[i] = item[i];
+                    }
+                    feature.DataRow.EndEdit();
+	            }
+                fs.DataTable.Columns.Remove("x");
+                fs.DataTable.Columns.Remove("y");
                 fs.SaveAs(save_path, true);
-                // Option 2: use savefiledialog in main wpf
             }
             catch (Exception ex)
             {

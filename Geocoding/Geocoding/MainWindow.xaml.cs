@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,9 +30,46 @@ namespace Geocoding
             //string path = System.Reflection.Assembly.GetCallingAssembly().CodeBase.ToString();
             string path = System.IO.Directory.GetCurrentDirectory();
             MessageBox.Show(ShapePlg.test_shape(path));
+            // add onclick listeners for import, export, geocode
         }
 
-        public void Save_Dialog()
+        private void open_Dialog()
+        {
+            // do it with onclick event
+            // maybe move code to onclick event
+            try
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+                openFileDialog1.Filter = "shape file (*.shp)|*.shp|csv file (*.csv)|*.csv";
+                openFileDialog1.FilterIndex = 2;
+                openFileDialog1.RestoreDirectory = true;
+
+                if (openFileDialog1.ShowDialog() == openFileDialog1.FileOk)
+                {
+                    // check here, what extension is used-> use corresponding class method for import
+                    switch (Path.GetExtension(openFileDialog1.FileName))
+                    {
+                        case "shp":
+                            ShapePlg.import(openFileDialog1.FileName);
+                            break;
+                        case "csv":
+                            //code for CSV export
+                            break;
+                        default:
+                            break;
+                    }
+                    openFileDialog1.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+        }
+
+        private void save_Dialog()
         {
             // do it with onclick event
             // maybe move code to onclick event
@@ -39,20 +77,19 @@ namespace Geocoding
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                saveFileDialog1.Filter = "shape files (*.shp)|*.shp|csv files (*.csv)|*.csv";
+                saveFileDialog1.Filter = "shape file (*.shp)|*.shp|csv file (*.csv)|*.csv";
                 saveFileDialog1.FilterIndex = 2;
                 saveFileDialog1.RestoreDirectory = true;
 
                 if (saveFileDialog1.ShowDialog() == saveFileDialog1.FileOk)
                 {
-                    // check here, what extension is used
-                    //string ext = Path.GetExtension(saveFileDialog1.FileName);
+                    // check here, what extension is used -> use corresponding class method for export
                     switch (Path.GetExtension(saveFileDialog1.FileName))
                     {
-                        case "shp":
-                            ShapePlg.export_Shape(saveFileDialog1.FileName);
+                        case ".shp":
+                            ShapePlg.export(dataGridTable,saveFileDialog1.FileName);
                             break;
-                        case "csv":
+                        case ".csv":
                             //code for CSV export
                             break;
                         default:
@@ -66,6 +103,27 @@ namespace Geocoding
                 Debug.WriteLine(ex.Message);
             }
             
+        }
+
+        private DataTable createDataTable()
+        {
+            DataGrid dgv = new DataGrid();
+            DataTable dt = new DataTable();
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                dt.Columns.Add(col.HeaderText);
+            }
+
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                DataRow dRow = dt.NewRow();
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    dRow[cell.ColumnIndex] = cell.Value;
+                }
+                dt.Rows.Add(dRow);
+            }
+            return dt;
         }
     }
 }
