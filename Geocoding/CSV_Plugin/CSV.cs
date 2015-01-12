@@ -12,7 +12,28 @@ namespace CSV_Plugin
     {
         public static int get100()
         {
-            return 1000;
+            return 100;
+        }
+
+        public static void exportCSV(DataTable table, string path)
+        {
+            var result = new StringBuilder();
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                result.Append(table.Columns[i].ColumnName);
+                result.Append(i == table.Columns.Count - 1 ? "\n" : ";");
+            }
+
+            foreach (DataRow row in table.Rows)
+            {
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    result.Append(row[i].ToString());
+                    result.Append(i == table.Columns.Count - 1 ? "\n" : ";");
+                }
+            }
+
+            System.IO.File.WriteAllText(@"D:\path.txt", result.ToString());
         }
 
         public static DataTable importCSV(string path)
