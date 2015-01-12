@@ -36,22 +36,22 @@ namespace Geocoding
             string currentDir = Environment.CurrentDirectory;
             DirectoryInfo directory = new DirectoryInfo(currentDir);
             string fullDirectory = directory.FullName;
-            MessageBox.Show(fullDirectory);
+            //MessageBox.Show(fullDirectory);
 
             //string fullFile = file.FullName;
 
             //MessageBox.Show(CSV_Plugin.CSV.get100().ToString()); //nur eine methode zum testen die 100 als int wert liefert
             //String testpath2 = "C:\\Temp\\GitHub\\geocoding-project\\Geocoding\\CSV_Plugin\\test.csv";
-            String testpath = @"C:\Temp\GitHub\geocoding-project\Geocoding\CSV_Plugin\test.csv";
+            String testpath = @"C:\Users\Ilja\Documents\git\Geocoding\CSV_Plugin\test.csv";
                         
-            if (File.Exists(testpath))
+            /*if (File.Exists(testpath))
             {
-                myDataTable = CSV_Plugin.CSV.importCSV(testpath);
+                //myDataTable = CSV_Plugin.CSV.importCSV(testpath);
             }
             else
             {
                 MessageBox.Show("File does not exist: " + testpath);
-            }
+            }*/
             
             
             //ILJA
@@ -68,13 +68,16 @@ namespace Geocoding
             myDataTable.Rows.Add("A3", "B3");*/
 
             // Bind DataTable to DataGrid.
-            grid1.ItemsSource = myDataTable.DefaultView;
+
+            //grid1.ItemsSource = myDataTable.DefaultView;
+            
             //grid1.Columns[0].Header = comboColumn;
+
 
             
             //string path = System.Reflection.Assembly.GetCallingAssembly().CodeBase.ToString();
             string path = System.IO.Directory.GetCurrentDirectory();
-            MessageBox.Show(ShapePlg.test_shape(path));
+            //MessageBox.Show(ShapePlg.test_shape(path));
             // add onclick listeners for import, export, geocode
         }
 
@@ -95,11 +98,13 @@ namespace Geocoding
                     // check here, what extension is used-> use corresponding class method for import
                     switch (System.IO.Path.GetExtension(openFileDialog1.FileName))
                     {
-                        case "shp":
+                        case ".shp":
                             ShapePlg.import_Shape(openFileDialog1.FileName);
                             break;
-                        case "csv":
+                        case ".csv":
                             //code for CSV export
+                            myDataTable = CSV_Plugin.CSV.importCSV(openFileDialog1.FileName);
+                            grid1.ItemsSource = myDataTable.DefaultView;
                             break;
                         default:
                             break;
@@ -148,6 +153,16 @@ namespace Geocoding
                 Debug.WriteLine(ex.Message);
             }
             
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            open_Dialog();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            save_Dialog();
         }
     }
 }
