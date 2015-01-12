@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -91,13 +90,13 @@ namespace Geocoding
                 openFileDialog1.FilterIndex = 2;
                 openFileDialog1.RestoreDirectory = true;
 
-                if (openFileDialog1.ShowDialog() == openFileDialog1.FileOk)
+                if (openFileDialog1.ShowDialog() == true)
                 {
                     // check here, what extension is used-> use corresponding class method for import
                     switch (System.IO.Path.GetExtension(openFileDialog1.FileName))
                     {
                         case "shp":
-                            ShapePlg.import(openFileDialog1.FileName);
+                            ShapePlg.import_Shape(openFileDialog1.FileName);
                             break;
                         case "csv":
                             //code for CSV export
@@ -105,7 +104,7 @@ namespace Geocoding
                         default:
                             break;
                     }
-                    openFileDialog1.FileName;
+                    //openFileDialog1.FileName;
                 }
             }
             catch (Exception ex)
@@ -127,13 +126,13 @@ namespace Geocoding
                 saveFileDialog1.FilterIndex = 2;
                 saveFileDialog1.RestoreDirectory = true;
 
-                if (saveFileDialog1.ShowDialog() == saveFileDialog1.FileOk)
+                if (saveFileDialog1.ShowDialog() == true)
                 {
                     // check here, what extension is used -> use corresponding class method for export
                     switch (System.IO.Path.GetExtension(saveFileDialog1.FileName))
                     {
                         case ".shp":
-                            ShapePlg.export(dataGridTable,saveFileDialog1.FileName);
+                            //ShapePlg.export_Shape(grid1,saveFileDialog1.FileName);
                             break;
                         case ".csv":
                             //code for CSV export
@@ -141,7 +140,7 @@ namespace Geocoding
                         default:
                             break;
                     }
-                        saveFileDialog1.FileName;
+                        //saveFileDialog1.FileName;
                 }
             }
             catch (Exception ex)

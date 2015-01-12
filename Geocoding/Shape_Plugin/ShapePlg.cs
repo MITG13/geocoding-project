@@ -55,7 +55,7 @@ namespace Shape_Plugin
             
         }
 
-        public static void export_Shape(DataTable table, string save_path)
+        /*public static void export_Shape(DataTable table, string save_path)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Shape_Plugin
                 //debug
                 Debug.WriteLine(ex.Message);
             }
-        }
+        }*/
         
     }
 
