@@ -12,7 +12,7 @@ namespace CSV_Plugin
     {
         public static int get100()
         {
-            return 100;
+            return 1000;
         }
 
         public static DataTable importCSV(string path)
