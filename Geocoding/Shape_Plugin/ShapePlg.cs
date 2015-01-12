@@ -32,7 +32,7 @@ namespace Shape_Plugin
             //return "Shape Plugin works";
         }
 
-        public static DataTable import(string path)
+        public static DataTable import_Shape(string path)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Shape_Plugin
             
         }
 
-        public static void export(DataTable table, string save_path)
+        public static void export_Shape(DataTable table, string save_path)
         {
             try
             {

@@ -48,7 +48,7 @@ namespace Geocoding
                 if (openFileDialog1.ShowDialog() == openFileDialog1.FileOk)
                 {
                     // check here, what extension is used-> use corresponding class method for import
-                    switch (Path.GetExtension(openFileDialog1.FileName))
+                    switch (System.IO.Path.GetExtension(openFileDialog1.FileName))
                     {
                         case "shp":
                             ShapePlg.import(openFileDialog1.FileName);
@@ -84,7 +84,7 @@ namespace Geocoding
                 if (saveFileDialog1.ShowDialog() == saveFileDialog1.FileOk)
                 {
                     // check here, what extension is used -> use corresponding class method for export
-                    switch (Path.GetExtension(saveFileDialog1.FileName))
+                    switch (System.IO.Path.GetExtension(saveFileDialog1.FileName))
                     {
                         case ".shp":
                             ShapePlg.export(dataGridTable,saveFileDialog1.FileName);
@@ -103,27 +103,6 @@ namespace Geocoding
                 Debug.WriteLine(ex.Message);
             }
             
-        }
-
-        private DataTable createDataTable()
-        {
-            DataGrid dgv = new DataGrid();
-            DataTable dt = new DataTable();
-            foreach (DataGridViewColumn col in dgv.Columns)
-            {
-                dt.Columns.Add(col.HeaderText);
-            }
-
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                DataRow dRow = dt.NewRow();
-                foreach (DataGridViewCell cell in row.Cells)
-                {
-                    dRow[cell.ColumnIndex] = cell.Value;
-                }
-                dt.Rows.Add(dRow);
-            }
-            return dt;
         }
     }
 }
