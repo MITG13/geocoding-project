@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geocoding", "Geocoding\Geocoding.csproj", "{641EE45B-48BB-49E4-AB28-026705BCB346}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shape_Plugin", "Shape_Plugin\Shape_Plugin.csproj", "{F697A1C7-F287-4FA8-86DC-DA61380A71C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{641EE45B-48BB-49E4-AB28-026705BCB346}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{641EE45B-48BB-49E4-AB28-026705BCB346}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{641EE45B-48BB-49E4-AB28-026705BCB346}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F697A1C7-F287-4FA8-86DC-DA61380A71C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F697A1C7-F287-4FA8-86DC-DA61380A71C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F697A1C7-F287-4FA8-86DC-DA61380A71C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F697A1C7-F287-4FA8-86DC-DA61380A71C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
