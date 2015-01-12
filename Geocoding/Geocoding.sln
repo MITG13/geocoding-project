@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geocoding", "Geocoding\Geoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSV_Plugin", "CSV_Plugin\CSV_Plugin.csproj", "{845E2685-E9AB-4179-823B-110320A7BF21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shape_Plugin", "Shape_Plugin\Shape_Plugin.csproj", "{F697A1C7-F287-4FA8-86DC-DA61380A71C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

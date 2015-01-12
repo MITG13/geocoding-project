@@ -1,0 +1,25 @@
+﻿<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>Coder</Name>
+  <AddInID>{51f62149-9b63-4a50-a9a3-99c4e886350a}</AddInID>
+  <Description>Type in a description for this Add-in.</Description>
+  <Version>1.0</Version>
+  <Image>Images\Coder.png</Image>
+  <Author>karin</Author>
+  <Company></Company>
+  <Date>10.01.2015</Date>
+  <Targets>
+    <Target name="Desktop" version="10.2" />
+  </Targets>
+  <AddIn language="CLR4.5" library="Coder.dll" namespace="Coder">
+    <ArcMap>
+      <DockableWindows>
+        <DockableWindow id="Coder_FHWN_GeoCoder" class="FHWN_GeoCoder+AddinImpl" caption="FHWN_GeoCoder" image="Images\FHWN_GeoCoder.png">
+          <InitialPlacement height="400" width="300" state="pinned" position="right" />
+        </DockableWindow>
+      </DockableWindows>
+      <Commands>
+        <Button id="Coder_ArcGISAddin1" class="ArcGISAddin1" message="FHWN Geocoding Interface" caption="FHWN_Code" tip="FHWN Geocoding Interface" category="FHWN_Code" image="Images\ArcGISAddin1.png" />
+      </Commands>
+    </ArcMap>
+  </AddIn>
+</ESRI.Configuration>
