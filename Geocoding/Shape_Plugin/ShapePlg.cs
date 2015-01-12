@@ -40,6 +40,7 @@ namespace Shape_Plugin
                 fs.FillAttributes();
                 DataTable dtOriginal = fs.DataTable;
                 return dtOriginal;
+				// in Datatable = dataGridView1.DataSource = dtOriginal.DefaultView;
                 //run through each row
                 /*for (int row = 0; row < dtOriginal.Rows.Count; row++)
                 {
