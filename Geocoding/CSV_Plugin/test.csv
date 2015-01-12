@@ -1,0 +1,5 @@
+country;city;zip;street;housenumber
+austria;bad sauerbrunn;7202;hauptstraße;10
+austria;wiener neustand;2700;blastraße;17
+austria;wiener neustand;2700;baumkirchner ring;2
+austria;;2700;blastraße;15
