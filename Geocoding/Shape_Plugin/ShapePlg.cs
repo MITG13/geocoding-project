@@ -59,8 +59,11 @@ namespace Shape_Plugin
         {
             try
             {
+                bool geomNotPresent = true;
                 // define the feature type for this file
                 FeatureSet fs = new FeatureSet(FeatureType.Point);
+                // Add WGS84 Projection as default
+                fs.Projection = DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984;
 
                 // Add Some Columns
                 // get Column Names from (DataTable)table
@@ -68,29 +71,68 @@ namespace Shape_Plugin
                 foreach (DataColumn column in table.Columns)
                 {
                     fs.DataTable.Columns.Add(column);
-                }
-                fs.DataTable.Columns.Add("geom", typeof(Point));
-                foreach (DataRow item in table.Rows)
-	            {
-                    // get x and y coordinates from (DataTable)table
-                    // coordinates array will contain x and y
-                    // check if coordinates are present
-                    if (item["coordinates"] != null)
+                    //or if above doesn't work
+                    //fs.DataTable.Columns.Add(new DataColumn(column.ColumnName,column.DataType);
+                    if (column.ColumnName == "the_geom" || column.ColumnName == "geom")
                     {
-                        double[] coordArray = item["coordiantes"] as double[];                        
-                        Coordinate coordinate = new Coordinate(coordArray[0] as double? ?? 0.0, coordArray[1] as double? ?? 0.0);
-                        Point geom = new Point(coordinate);
-                        IFeature feature = fs.AddFeature(geom);
-                        feature.DataRow.BeginEdit();
-                        //is geom index 0 or last index????
-                        for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                        geomNotPresent = false;
+                    }
+                }
+                // check if there already is a geometry in place, for whatever reason.
+                if (geomNotPresent)
+                {
+                    fs.DataTable.Columns.Add("geom", typeof(Point));
+                                
+                    foreach (DataRow item in table.Rows)
+	                {
+                        // get x and y coordinates from (DataTable)table
+                        // coordinates array will contain x and y
+                        // check if coordinates are present
+                        if (item["coordinates"] != null)
                         {
-                            feature.DataRow[i] = item[i];
+                            double[] coordArray = item["coordiantes"] as double[];                        
+                            Coordinate coordinate = new Coordinate(coordArray[0] as double? ?? 0.0, coordArray[1] as double? ?? 0.0);
+                            Point geom = new Point(coordinate);
+                            IFeature feature = fs.AddFeature(geom);
+                            feature.DataRow.BeginEdit();
+                            //is geom index 0 or last index????
+                            for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                            {
+                                feature.DataRow[i] = item[i];
+                            }
+                            feature.DataRow.EndEdit();
+                        }                    
+	                }
+                    fs.DataTable.Columns.Remove("coordinates");
+                }
+                else
+                {
+                    foreach (DataRow item in table.Rows)
+                    {
+                        // if geometry already present, add it without editing
+                        // check if geometry column is named "geom" or "the_geom"
+                        if (item["geom"] != null)
+                        {
+                            IFeature feature = fs.AddFeature(item["geom"]);
+                            feature.DataRow.BeginEdit();
+                            for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                            {
+                                feature.DataRow[i] = item[i];
+                            }
+                            feature.DataRow.EndEdit();
                         }
-                        feature.DataRow.EndEdit();
-                    }                    
-	            }
-                fs.DataTable.Columns.Remove("coordinates");
+                        else if (item["the_geom"] != null)
+                        {
+                            IFeature feature = fs.AddFeature(item["the_geom"]);
+                            feature.DataRow.BeginEdit();
+                            for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                            {
+                                feature.DataRow[i] = item[i];
+                            }
+                            feature.DataRow.EndEdit();
+                        }
+                    }
+                }
                 fs.SaveAs(save_path, true);
             }
             catch (Exception ex)
