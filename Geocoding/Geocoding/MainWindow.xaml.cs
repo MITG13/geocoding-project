@@ -99,7 +99,8 @@ namespace Geocoding
                     switch (System.IO.Path.GetExtension(openFileDialog1.FileName))
                     {
                         case ".shp":
-                            ShapePlg.import_Shape(openFileDialog1.FileName);
+                            myDataTable = ShapePlg.import_Shape(openFileDialog1.FileName);
+                            grid1.ItemsSource = myDataTable.DefaultView;
                             break;
                         case ".csv":
                             //code for CSV export
@@ -136,8 +137,11 @@ namespace Geocoding
                     // check here, what extension is used -> use corresponding class method for export
                     switch (System.IO.Path.GetExtension(saveFileDialog1.FileName))
                     {
-                        case ".shp":                            
-                            //ShapePlg.export_Shape(grid1,saveFileDialog1.FileName);
+                        case ".shp":
+                            DataTable dt = (DataTable)(grid1.DataContext);
+                            //or
+                            //DataTable dt = ((DataSet)grid1.DataContext).Tables[0];
+                            ShapePlg.export_Shape(dt,saveFileDialog1.FileName);
                             break;
                         case ".csv":
                             //code for CSV export
