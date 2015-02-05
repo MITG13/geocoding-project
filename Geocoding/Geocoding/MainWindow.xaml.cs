@@ -136,7 +136,7 @@ namespace Geocoding
                     // check here, what extension is used -> use corresponding class method for export
                     switch (System.IO.Path.GetExtension(saveFileDialog1.FileName))
                     {
-                        case ".shp":
+                        case ".shp":                            
                             //ShapePlg.export_Shape(grid1,saveFileDialog1.FileName);
                             break;
                         case ".csv":
