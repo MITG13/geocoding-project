@@ -100,11 +100,31 @@ app.use('/getCoords', function (req, res, next) {
 
 });
 app.use('/getAddress', function (req, res, next) {
-    var responseJSON = {
+    var provider = req.param('provider');
+    var geometry = req.param('geometry');
+    var selectedProvider = providers[provider];
 
-    };
-    res.json(responseJSON);
-    next();
+    var errors = [];
+
+    if (!selectedProvider) {
+        errors.push('GeoCoding Provider not found!');
+    }
+    if (typeof geometry !== 'object' || Object.keys(geometry).length === 0) {
+        errors.push('No Properties found!');
+    }
+    console.log(geometry);
+    function callback (responseJSON) {
+        res.json(responseJSON);
+        next();
+    }
+
+    if (errors.length === 0) {
+        selectedProvider.getAddress(geometry, callback);
+    } else {
+        callback({
+            errors: errors
+        });
+    }
 });
 
 app.listen(80);
