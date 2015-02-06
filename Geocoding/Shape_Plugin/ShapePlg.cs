@@ -35,12 +35,11 @@ namespace Shape_Plugin
         public static DataTable import_Shape(string path)
         {
             try
-            {
+            {                
                 FeatureSet fs = (FeatureSet)FeatureSet.Open(path);
                 fs.FillAttributes();
                 DataTable dtOriginal = fs.DataTable;
-                return dtOriginal;
-				// in Datatable = dataGridView1.DataSource = dtOriginal.DefaultView;
+                return dtOriginal;				
                 //run through each row
                 /*for (int row = 0; row < dtOriginal.Rows.Count; row++)
                 {
@@ -55,37 +54,47 @@ namespace Shape_Plugin
             
         }
 
-        /*public static void export_Shape(DataTable table, string save_path)
+        public static void export_Shape(DataTable table, string save_path)
         {
             try
             {
                 // define the feature type for this file
                 FeatureSet fs = new FeatureSet(FeatureType.Point);
+                // Add WGS84 Projection as default
+                fs.Projection = DotSpatial.Projections.KnownCoordinateSystems.Geographic.World.WGS1984;
 
                 // Add Some Columns
                 // get Column Names from (DataTable)table
                 // Test Case:
-                foreach (DataColumn item in table)
+                foreach (DataColumn column in table.Columns)
                 {
-                    fs.DataTable.Columns.Add(item);
+                    fs.DataTable.Columns.Add(column);
+                    //or if above doesn't work
+                    //fs.DataTable.Columns.Add(new DataColumn(column.ColumnName,column.DataType);
                 }
-                fs.DataTable.Columns.Add("geom", typeof(Point));
-                foreach (DataRow item in table)
+                            
+                foreach (DataRow item in table.Rows)
 	            {
-                    // get x and y coodrinates from (DataTable)table
-                    Coordinate coordinate = new Coordinate(item["x"], item["y"]);
-                    Point geom = new Point(coordinate);
-                    IFeature feature = fs.AddFeature(geom);
-                    feature.DataRow.BeginEdit();
-                    //is geom index 0 or last index????
-                    for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                    // get x and y coordinates from (DataTable)table
+                    // coordinates array will contain x and y
+                    // check if coordinates are present
+                    if (item["coordinates"] != null)
                     {
-                        feature.DataRow[i] = item[i];
-                    }
-                    feature.DataRow.EndEdit();
+                        double[] coordArray = item["coordiantes"] as double[];                        
+                        Coordinate coordinate = new Coordinate(coordArray[0] as double? ?? 0.0, coordArray[1] as double? ?? 0.0);
+                        Point geom = new Point(coordinate);
+                        IFeature feature = fs.AddFeature(geom);
+                        feature.DataRow.BeginEdit();
+                        //is geom index 0 or last index????
+                        for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                        {
+                            feature.DataRow[i] = item[i];
+                        }
+                        feature.DataRow.EndEdit();
+                    }                    
 	            }
-                fs.DataTable.Columns.Remove("x");
-                fs.DataTable.Columns.Remove("y");
+                fs.DataTable.Columns.Remove("coordinates");
+                
                 fs.SaveAs(save_path, true);
             }
             catch (Exception ex)
@@ -93,7 +102,7 @@ namespace Shape_Plugin
                 //debug
                 Debug.WriteLine(ex.Message);
             }
-        }*/
+        }
         
     }
 
