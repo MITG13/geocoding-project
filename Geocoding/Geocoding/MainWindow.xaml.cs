@@ -142,8 +142,11 @@ namespace Geocoding
                     switch (System.IO.Path.GetExtension(saveFileDialog1.FileName))
                     {
                         case ".shp":
-
-                            ShapePlg.export_Shape(myDataTable, saveFileDialog1.FileName);
+                            if (ShapePlg.export_Shape(myDataTable, saveFileDialog1.FileName))
+                            {
+                                MessageBox.Show("Shapefile created!");
+                            }
+                            else MessageBox.Show("Table is empty!");                            
                             break;
                         case ".csv":
                             //code for CSV export
