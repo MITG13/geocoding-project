@@ -34,8 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BruTile">
-      <HintPath>..\packages\BruTile.0.12.0\lib\net40\BruTile.dll</HintPath>
+    <Reference Include="BruTile, Version=0.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\BruTileLayer\BruTile.dll</HintPath>
     </Reference>
     <Reference Include="CSV_Plugin">
       <HintPath>..\CSV_Plugin\bin\Debug\CSV_Plugin.dll</HintPath>
@@ -63,6 +64,9 @@
     <Reference Include="DotSpatial.Plugins.SimpleMap">
       <HintPath>..\packages\DotSpatial.Plugins.SimpleMap\DotSpatial.Plugins.SimpleMap.dll</HintPath>
     </Reference>
+    <Reference Include="DotSpatial.Plugins.WebMap">
+      <HintPath>..\packages\DotSpatial.WebMap\DotSpatial.Plugins.WebMap.dll</HintPath>
+    </Reference>
     <Reference Include="DotSpatial.Projections, Version=1.7.0.0, Culture=neutral, PublicKeyToken=272632bddd08a38b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DotSpatial.Projections.1.7\lib\net40-Client\DotSpatial.Projections.dll</HintPath>
@@ -84,11 +88,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DotSpatial.Topology.1.7\lib\net40-Client\DotSpatial.Topology.dll</HintPath>
     </Reference>
-    <Reference Include="Shape_Plugin">
-      <HintPath>..\Shape_Plugin\bin\Debug\Shape_Plugin.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -116,6 +118,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BrutileLayer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,6 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shape_Plugin\Shape_Plugin.csproj">
+      <Project>{f697a1c7-f287-4fa8-86dc-da61380a71c9}</Project>
+      <Name>Shape_Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

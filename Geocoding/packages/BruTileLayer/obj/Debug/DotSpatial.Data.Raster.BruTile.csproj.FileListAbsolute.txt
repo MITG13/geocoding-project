@@ -1,0 +1,1 @@
+D:\Development\Codeplex\dotSpatial\DotSpatial.Data.Raster.BruTile\obj\Debug\ResolveAssemblyReference.cache
