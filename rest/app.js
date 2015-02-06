@@ -72,8 +72,8 @@ app.get('/getGeoCodingProviders', function (req, res, next) {
     next();
 });
 app.use('/getCoords', function (req, res, next) {
-    var provider = req.param('provider');
-    var properties = req.param('properties');
+    var provider = req.param('provider').toLowerCase();
+    var properties = JSON.parse(req.param('properties'));
     var selectedProvider = providers[provider];
 
     var errors = [];
@@ -82,7 +82,7 @@ app.use('/getCoords', function (req, res, next) {
         errors.push('GeoCoding Provider not found!');
     }
     if (typeof properties !== 'object' || Object.keys(properties).length === 0) {
-        errors.push('No Properties found!');
+        errors.push('No correct properties found!');
     }
 
     function callback (responseJSON) {
@@ -100,8 +100,8 @@ app.use('/getCoords', function (req, res, next) {
 
 });
 app.use('/getAddress', function (req, res, next) {
-    var provider = req.param('provider');
-    var geometry = req.param('geometry');
+    var provider = req.param('provider').toLowerCase();
+    var geometry = JSON.parse(req.param('geometry'));
     var selectedProvider = providers[provider];
 
     var errors = [];
@@ -109,8 +109,8 @@ app.use('/getAddress', function (req, res, next) {
     if (!selectedProvider) {
         errors.push('GeoCoding Provider not found!');
     }
-    if (typeof geometry !== 'object' || Object.keys(geometry).length === 0) {
-        errors.push('No Properties found!');
+    if (typeof geometry !== 'object' || typeof geometry.coordinates !== 'array') {
+        errors.push('No Coordinates found!');
     }
 
     function callback (responseJSON) {
