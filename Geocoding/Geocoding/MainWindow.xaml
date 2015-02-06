@@ -1,15 +1,24 @@
 ﻿<Window x:Class="Geocoding.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:mapping="clr-namespace:DotSpatial.Controls;assembly=DotSpatial.Controls"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="169*"/>
+            <ColumnDefinition Width="348*"/>
+        </Grid.ColumnDefinitions>
         <DataGrid  
                          x:Name="grid1"                         
                          ColumnHeaderHeight="25"
-                         AutoGenerateColumns="True"  
+                         AutoGenerateColumns="True" Grid.ColumnSpan="2" Margin="0,37,0,0"  
                               >
         </DataGrid>
-        <Button Content="Import" HorizontalAlignment="Left" Margin="30,169,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <Button Content="Export" HorizontalAlignment="Left" Margin="128,169,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
+        <WindowsFormsHost Margin="30,77,27,48" Grid.ColumnSpan="2">
+            <mapping:Map x:Name="map_dotNet" ></mapping:Map>
+        </WindowsFormsHost>
+        <Button Content="Import" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <Button Content="Export" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
     </Grid>
 </Window>

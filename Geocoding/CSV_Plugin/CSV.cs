@@ -33,7 +33,7 @@ namespace CSV_Plugin
                 }
             }
 
-            System.IO.File.WriteAllText(@"D:\path.txt", result.ToString());
+            //System.IO.File.WriteAllText(path, result.ToString());
         }
 
         public static DataTable importCSV(string path)

@@ -17,6 +17,9 @@ using System.Windows.Shapes;
 using Shape_Plugin;
 using Microsoft.Win32;
 using System.Diagnostics;
+using DotSpatial.Controls;
+using BruTile;
+using DotSpatial.Plugins.SimpleMap;
 
 namespace Geocoding
 {
@@ -31,8 +34,8 @@ namespace Geocoding
         {
             InitializeComponent();
 
+            //map_dotNet.AddLayer();
             //FELIX TEST "CSV_Plugin"
-
             string currentDir = Environment.CurrentDirectory;
             DirectoryInfo directory = new DirectoryInfo(currentDir);
             string fullDirectory = directory.FullName;
@@ -42,7 +45,7 @@ namespace Geocoding
 
             //MessageBox.Show(CSV_Plugin.CSV.get100().ToString()); //nur eine methode zum testen die 100 als int wert liefert
             //String testpath2 = "C:\\Temp\\GitHub\\geocoding-project\\Geocoding\\CSV_Plugin\\test.csv";
-            String testpath = @"C:\Users\Ilja\Documents\git\Geocoding\CSV_Plugin\test.csv";
+            //String testpath = @"C:\Users\Ilja\Documents\git\Geocoding\CSV_Plugin\test.csv";
                         
             /*if (File.Exists(testpath))
             {
@@ -99,11 +102,13 @@ namespace Geocoding
                     switch (System.IO.Path.GetExtension(openFileDialog1.FileName))
                     {
                         case ".shp":
-                            ShapePlg.import_Shape(openFileDialog1.FileName);
+                            myDataTable = ShapePlg.import_Shape(openFileDialog1.FileName);
+                            grid1.ItemsSource = myDataTable.DefaultView;
                             break;
                         case ".csv":
                             //code for CSV export
                             myDataTable = CSV_Plugin.CSV.importCSV(openFileDialog1.FileName);
+                           // CSV_Plugin.CSV.importCSV(@"C:\Users\Ilja\Documents\testexport.csv");
                             grid1.ItemsSource = myDataTable.DefaultView;
                             break;
                         default:
@@ -163,6 +168,37 @@ namespace Geocoding
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             save_Dialog();
+        }
+        public static DataTable DataGridtoDataTable(DataGrid dg)
+        {
+
+
+            dg.SelectAllCells();
+            dg.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, dg);
+            dg.UnselectAllCells();
+            String result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+            string[] Lines = result.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            string[] Fields;
+            Fields = Lines[0].Split(new char[] { ',' });
+            int Cols = Fields.GetLength(0);
+            DataTable dt = new DataTable();
+            //1st row must be column names; force lower case to ensure matching later on.
+            for (int i = 0; i < Cols; i++)
+                dt.Columns.Add(Fields[i].ToUpper(), typeof(string));
+            DataRow Row;
+            for (int i = 1; i < Lines.GetLength(0) - 1; i++)
+            {
+                Fields = Lines[i].Split(new char[] { ',' });
+                Row = dt.NewRow();
+                for (int f = 0; f < Cols; f++)
+                {
+                    Row[f] = Fields[f];
+                }
+                dt.Rows.Add(Row);
+            }
+            return dt;
+
         }
     }
 }
