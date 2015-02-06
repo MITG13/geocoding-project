@@ -160,6 +160,7 @@ namespace Geocoding
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             
         }
