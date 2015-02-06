@@ -35,12 +35,11 @@ namespace Shape_Plugin
         public static DataTable import_Shape(string path)
         {
             try
-            {
+            {                
                 FeatureSet fs = (FeatureSet)FeatureSet.Open(path);
                 fs.FillAttributes();
                 DataTable dtOriginal = fs.DataTable;
-                return dtOriginal;
-				// in Datatable = dataGridView1.DataSource = dtOriginal.DefaultView;
+                return dtOriginal;				
                 //run through each row
                 /*for (int row = 0; row < dtOriginal.Rows.Count; row++)
                 {
@@ -59,7 +58,6 @@ namespace Shape_Plugin
         {
             try
             {
-                bool geomNotPresent = true;
                 // define the feature type for this file
                 FeatureSet fs = new FeatureSet(FeatureType.Point);
                 // Add WGS84 Projection as default

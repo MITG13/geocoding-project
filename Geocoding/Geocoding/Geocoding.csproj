@@ -37,7 +37,8 @@
     <Reference Include="CSV_Plugin">
       <HintPath>..\CSV_Plugin\bin\Debug\CSV_Plugin.dll</HintPath>
     </Reference>
-    <Reference Include="Shape_Plugin">
+    <Reference Include="Shape_Plugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shape_Plugin\bin\Debug\Shape_Plugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
