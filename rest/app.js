@@ -1,38 +1,35 @@
 'use strict';
 
-var fs = require('fs');
+var providers = require('./providers');
 var express = require('express');
 var app = express();
 
-app.set('json spaces',4);
-
-
-
-
+app.set('json spaces', 4);
 
 app.get('/', function (req, res, next) {
     var responseJSON = {
         "requests": [
             {
                 "url": "/",
-                "request_types": ["get"],
-                "params": {
-
-                }
+                "request_types": ["get"]
             },
             {
                 "url": "/getGeoCodingProviders",
-                "request_types": ["get"],
-                "params": {
-
-                }
+                "request_types": ["get"]
             },
             {
                 "url": "/getCoords",
                 "request_types": ["get", "post"],
                 "params": {
                     "provider": "PROVIDER",
-                    "": ""
+                    "properties": {
+                        "address": "",
+                        "country": "",
+                        "zip": 1234,
+                        "city": "",
+                        "street": "",
+                        "housenumber": ""
+                    }
                 }
             },
             {
@@ -42,7 +39,7 @@ app.get('/', function (req, res, next) {
                     "provider": "PROVIDER",
                     "geometry": {
                         "type": "Point",
-                        "coordinates": ["X", "Y"]
+                        "coordinates": [12, 34]
                     }
                 }
             }
@@ -75,11 +72,32 @@ app.get('/getGeoCodingProviders', function (req, res, next) {
     next();
 });
 app.use('/getCoords', function (req, res, next) {
-    var responseJSON = {
+    var provider = req.param('provider');
+    var properties = req.param('properties');
+    var selectedProvider = providers[provider];
 
-    };
-    res.json(responseJSON);
-    next();
+    var errors = [];
+
+    if (!selectedProvider) {
+        errors.push('GeoCoding Provider not found!');
+    }
+    if (typeof properties !== 'object' || Object.keys(properties).length === 0) {
+        errors.push('No Properties found!');
+    }
+
+    function callback (responseJSON) {
+        res.json(responseJSON);
+        next();
+    }
+
+    if (errors.length === 0) {
+        selectedProvider.getCoords(properties, callback);
+    } else {
+        callback({
+            errors: errors
+        });
+    }
+
 });
 app.use('/getAddress', function (req, res, next) {
     var responseJSON = {

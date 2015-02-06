@@ -5,14 +5,14 @@
     "properties": {
         "address": "",
         "country": "",
-        "zip": xxxx,
+        "zip": 1234,
         "city": "",
         "street": "",
         "housenumber": ""
     },
-    "location": {
-        "lat": xx.x,
-        "lon": xx.x
+    "geometry": {
+        "type": "Point",
+        "coordinates": [12, 34]
     },
     "epsg": ""
 }
