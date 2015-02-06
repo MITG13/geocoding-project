@@ -78,10 +78,9 @@ namespace Shape_Plugin
                     // get x and y coordinates from (DataTable)table
                     // coordinates array will contain x and y
                     // check if coordinates are present
-                    if (item["coordinates"] != null)
-                    {
-                        double[] coordArray = item["coordiantes"] as double[];                        
-                        Coordinate coordinate = new Coordinate(coordArray[0] as double? ?? 0.0, coordArray[1] as double? ?? 0.0);
+                    if (item["x"] != null && item["y"] != null)
+                    {                       
+                        Coordinate coordinate = new Coordinate(item["x"] as double? ?? 0.0, item["y"] as double? ?? 0.0);
                         Point geom = new Point(coordinate);
                         IFeature feature = fs.AddFeature(geom);
                         feature.DataRow.BeginEdit();
@@ -91,7 +90,21 @@ namespace Shape_Plugin
                             feature.DataRow[i] = item[i];
                         }
                         feature.DataRow.EndEdit();
-                    }                    
+                    }
+                    // else only if all datatable entries should be exported, regardless if geometry null
+                    /*else
+                    {
+                        Point geom = new Point();
+                        IFeature feature = fs.AddFeature(geom);
+                        feature.DataRow.BeginEdit();
+                        //is geom index 0 or last index????
+                        for (int i = 0; i < fs.DataTable.Columns.Count; i++)
+                        {
+                            feature.DataRow[i] = item[i];
+                        }
+                        feature.DataRow.EndEdit();
+                    }*/
+              
 	            }
                 fs.DataTable.Columns.Remove("coordinates");
                 
