@@ -13,25 +13,6 @@ namespace Shape_Plugin
 {
     public static class ShapePlg
     {
-
-        /*public static string NameOfPlugin
-        {
-            get { return "Shape_Plugin"; }
-        }
-
-        public static string getName()
-        {
-            return this.NameOfPlugin;
-        }*/
-
-        public static string test_shape(string path)
-        {
-            //System.Reflection.Assembly.GetCallingAssembly().Location;
-            //return System.Reflection.Assembly.GetCallingAssembly().CodeBase;
-            return path;           
-            //return "Shape Plugin works";
-        }
-
         public static DataTable import_Shape(string path)
         {
             try
@@ -39,13 +20,9 @@ namespace Shape_Plugin
                 FeatureSet fs = (FeatureSet)FeatureSet.Open(path);
                 fs.FillAttributes();
                 DataTable dtOriginal = fs.DataTable;
-                return dtOriginal;				
-                //run through each row
-                /*for (int row = 0; row < dtOriginal.Rows.Count; row++)
-                {
-                    object[] original = dtOriginal.Rows[row].ItemArray;
-                }*/
+                return dtOriginal;
             }
+
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
