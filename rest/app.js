@@ -73,8 +73,11 @@ app.get('/getGeoCodingProviders', function (req, res, next) {
 });
 app.use('/getCoords', function (req, res, next) {
     var provider = req.param('provider').toLowerCase();
-    var properties = JSON.parse(req.param('properties'));
+    var properties = req.param('properties');
     var selectedProvider = providers[provider];
+    if (typeof(geometry) === 'string') {
+        geometry = JSON.parse(geometry);
+    }
 
     var errors = [];
 
@@ -101,15 +104,18 @@ app.use('/getCoords', function (req, res, next) {
 });
 app.use('/getAddress', function (req, res, next) {
     var provider = req.param('provider').toLowerCase();
-    var geometry = JSON.parse(req.param('geometry'));
+    var geometry = req.param('geometry');
     var selectedProvider = providers[provider];
+    if (typeof(geometry) === 'string') {
+        geometry = JSON.parse(geometry);
+    }
 
     var errors = [];
 
     if (!selectedProvider) {
         errors.push('GeoCoding Provider not found!');
     }
-    if (typeof geometry !== 'object' || typeof geometry.coordinates !== 'array') {
+    if (typeof(geometry) !== 'object' || typeof(geometry.coordinates) !== 'object') {
         errors.push('No Coordinates found!');
     }
 
