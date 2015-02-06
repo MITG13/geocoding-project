@@ -112,7 +112,7 @@ app.use('/getAddress', function (req, res, next) {
     if (typeof geometry !== 'object' || Object.keys(geometry).length === 0) {
         errors.push('No Properties found!');
     }
-    console.log(geometry);
+
     function callback (responseJSON) {
         res.json(responseJSON);
         next();

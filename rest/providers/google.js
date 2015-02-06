@@ -9,6 +9,7 @@ var requestURL = 'http://maps.googleapis.com/maps/api/geocode/json?';
 exports.getCoords = function(properties, cb) {
     var options = {
         qs: {
+            sensor: false,
             address: properties.address
         }
     };
@@ -23,6 +24,7 @@ exports.getCoords = function(properties, cb) {
 exports.getAddress = function(geometry, cb) {
     var options = {
         qs: {
+            sensor: false,
             latlng: geometry.coordinates[0] + ',' + geometry.coordinates[1]
         }
     };
@@ -90,7 +92,7 @@ function parseJSON(body) {
 // Polyfill
 if (!Array.prototype.find) {
     Array.prototype.find = function(predicate) {
-        if (this == null) {
+        if (this === null) {
             throw new TypeError('Array.prototype.find called on null or undefined');
         }
         if (typeof predicate !== 'function') {
