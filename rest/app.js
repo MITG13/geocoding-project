@@ -128,4 +128,7 @@ app.use('/getAddress', function (req, res, next) {
     }
 });
 
-app.listen(8000);
+
+var port = 8000;
+app.listen(port);
+console.log('Run on Port: ' + port);

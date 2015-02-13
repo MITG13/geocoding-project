@@ -53,8 +53,6 @@ exports.getAddress = function(geometry, cb) {
 function parseJSON(body) {
     var result = JSON.parse(body)[0];
 
-    console.log(result);
-
     var props = {
         country: null,
         postcode: null,
