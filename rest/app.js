@@ -51,21 +51,16 @@ app.get('/', function (req, res, next) {
 });
 
 app.get('/getGeoCodingProviders', function (req, res, next) {
+    var providerNames = [];
+
+    for (var provider in providers) {
+        if (providers.hasOwnProperty(provider)) {
+            providerNames.push(providers[provider].name);
+        }
+    }
+
     var responseJSON = {
-        "providers": [
-            {
-                "name": "Google",
-                "options": {}
-            },
-            {
-                "name": "Bing",
-                "options": {}
-            },
-            {
-                "name": "HERE",
-                "options": {}
-            }
-        ]
+        "providers": providerNames
     };
 
     res.json(responseJSON);
@@ -133,4 +128,4 @@ app.use('/getAddress', function (req, res, next) {
     }
 });
 
-app.listen(80);
+app.listen(8000);

@@ -6,8 +6,6 @@ var request = require('request');
 
 exports = module.exports = {};
 
-exports.name = 'Google';
-
 var requestURL = 'http://maps.googleapis.com/maps/api/geocode/json?';
 
 exports.getCoords = function(properties, cb) {
