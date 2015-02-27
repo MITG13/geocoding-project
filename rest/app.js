@@ -70,8 +70,8 @@ app.use('/getCoords', function (req, res, next) {
     var provider = req.param('provider').toLowerCase();
     var properties = req.param('properties');
     var selectedProvider = providers[provider];
-    if (typeof(geometry) === 'string') {
-        geometry = JSON.parse(geometry);
+    if (typeof(properties) === 'string') {
+        properties = JSON.parse(properties);
     }
 
     var errors = [];
