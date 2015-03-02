@@ -19,7 +19,7 @@ app.get('/', function (req, res, next) {
             },
             {
                 "url": "/getCoords",
-                "request_types": ["get", "post"],
+                "request_types": ["get"],
                 "params": {
                     "provider": "PROVIDER",
                     "properties": {
@@ -34,7 +34,7 @@ app.get('/', function (req, res, next) {
             },
             {
                 "url": "/getAddress",
-                "request_types": ["get", "post"],
+                "request_types": ["get"],
                 "params": {
                     "provider": "PROVIDER",
                     "geometry": {
@@ -67,8 +67,8 @@ app.get('/getGeoCodingProviders', function (req, res, next) {
     next();
 });
 app.use('/getCoords', function (req, res, next) {
-    var provider = req.param('provider').toLowerCase();
-    var properties = req.param('properties');
+    var provider = req.query.provider.toLowerCase();
+    var properties = req.query.properties;
     var selectedProvider = providers[provider];
     if (typeof(properties) === 'string') {
         properties = JSON.parse(properties);
@@ -98,8 +98,8 @@ app.use('/getCoords', function (req, res, next) {
 
 });
 app.use('/getAddress', function (req, res, next) {
-    var provider = req.param('provider').toLowerCase();
-    var geometry = req.param('geometry');
+    var provider = req.query.provider.toLowerCase();
+    var geometry = req.query.geometry;
     var selectedProvider = providers[provider];
     if (typeof(geometry) === 'string') {
         geometry = JSON.parse(geometry);
