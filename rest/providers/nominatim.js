@@ -51,66 +51,76 @@ exports.getAddress = function(geometry, cb) {
 
 
 function parseJSON(body) {
-    var result = JSON.parse(body)[0];
-
-    var props = {
-        country: null,
-        postcode: null,
-        city: null,
-        road: null,
-        house_number: null
-    };
-
-    for (var component in result.address) {
-        if (result.address.hasOwnProperty(component)) {
-            switch (component) {
-                case "country":
-                    props.country = result.address[component];
-                    break;
-                case "postcode":
-                    props.postcode = result.address[component];
-                    break;
-                case "city":
-                    props.city = result.address[component];
-                    break;
-                case "town":
-                    props.city = result.address[component];
-                    break;
-                case "village":
-                    props.city = result.address[component];
-                    break;
-                case "hamlet":
-                    props.city = result.address[component];
-                    break;
-                case "road":
-                    props.road = result.address[component];
-                    break;
-                case "path":
-                    props.road = result.address[component];
-                    break;
-                case "pedestrian":
-                    props.road = result.address[component];
-                    break;
-                case "house_number":
-                    props.house_number = result.address[component];
-                    break;
-            }
-        }
+    if (typeof(body) === 'string') {
+        body = JSON.parse(body);
     }
 
-    return {
-        "properties": {
-            "address": result.display_name,
-            "country": props.country,
-            "zip": props.postcode,
-            "city": props.city,
-            "street": props.road,
-            "housenumber": props.house_number
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [result.lat, result.lon]
-        },
-        "epsg": "EPSG:4326"
-    };
+    if (body.length === 0) {
+        return {
+            errors: ['No address found!']
+        };
+    } else {
+        var result = body[0];
+
+        var props = {
+            country: null,
+            postcode: null,
+            city: null,
+            road: null,
+            house_number: null
+        };
+
+        for (var component in result.address) {
+            if (result.address.hasOwnProperty(component)) {
+                switch (component) {
+                    case "country":
+                        props.country = result.address[component];
+                        break;
+                    case "postcode":
+                        props.postcode = result.address[component];
+                        break;
+                    case "city":
+                        props.city = result.address[component];
+                        break;
+                    case "town":
+                        props.city = result.address[component];
+                        break;
+                    case "village":
+                        props.city = result.address[component];
+                        break;
+                    case "hamlet":
+                        props.city = result.address[component];
+                        break;
+                    case "road":
+                        props.road = result.address[component];
+                        break;
+                    case "path":
+                        props.road = result.address[component];
+                        break;
+                    case "pedestrian":
+                        props.road = result.address[component];
+                        break;
+                    case "house_number":
+                        props.house_number = result.address[component];
+                        break;
+                }
+            }
+        }
+
+        return {
+            "properties": {
+                "address": result.display_name,
+                "country": props.country,
+                "zip": props.postcode,
+                "city": props.city,
+                "street": props.road,
+                "housenumber": props.house_number
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [result.lat, result.lon]
+            },
+            "epsg": "EPSG:4326"
+        };
+    }
 }
