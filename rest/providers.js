@@ -13,7 +13,7 @@ var PROVIDERS = {};
         files.forEach(function (file) {
             PROVIDERS[file.slice(0, -3)] = require(PROVIDERS_DIR + file);
         });
-        console.log(PROVIDERS);
+        //console.log(PROVIDERS);
     });
 })();
 
