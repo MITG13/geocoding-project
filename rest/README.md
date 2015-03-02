@@ -15,6 +15,9 @@ $ npm install -g nodemon
 
 run command:
 ```bash
+// for productive
+$ node app
+// for development
 $ nodemon app
 ```
 
@@ -28,10 +31,14 @@ $ nodemon app
 
 ## REST Routes
 - For Infos: `GET /`
-- Get Providers `GET /getGeoCodingProviders`
-- Get Coordinates from Properties `GET /getCoords`
-- Get Properties from Coordinates `GET /getAddress`
+- Get Providers: `GET /getGeoCodingProviders`
+- Get Coordinates from Properties: `GET /getCoords` | Parameter: `properties: { ...: ...}`
+- Get Properties from Coordinates: `GET /getAddress` | Parameter: `geometry: { coordinates: [lng, lat] }`
 
 
 ## JSON Format
 Look at ./JSON.md
+
+
+## Providers
+To add new Providers, put your provider-plugin in the providers folder and restart rest-server
