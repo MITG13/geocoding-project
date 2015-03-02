@@ -1,5 +1,10 @@
-# geocoding-project
+# Geocoding-Project
 
 ## REST API
+Sub-Project in `rest/`
 
-Sub-Projekt in rest/
+## AcrGIS AddIn
+Sub-Project in `Arcgis Addin/`
+
+## WPF & RESTlib & Import/Export-Plugins
+Sub-Project in `Geocoding/`
