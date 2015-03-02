@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rest_Interface", "Rest_Interface\Rest_Interface.csproj", "{ADAF0A1C-5DA2-499E-8353-1C8D37131473}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoCodingInterface", "Rest_Interface\GeoCodingInterface.csproj", "{ADAF0A1C-5DA2-499E-8353-1C8D37131473}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
