@@ -15,24 +15,36 @@ namespace CSV_Plugin
             return 100;
         }
 
-        public static void exportCSV(DataTable table, string path)
+        public static bool exportCSV(DataTable table, string path)
         {
-            var result = new StringBuilder();
-            for (int i = 0; i < table.Columns.Count; i++)
+            try
             {
-                result.Append(table.Columns[i].ColumnName);
-                result.Append(i == table.Columns.Count - 1 ? "\n" : ";");
-            }
-
-            foreach (DataRow row in table.Rows)
-            {
+                var result = new StringBuilder();
                 for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    result.Append(row[i].ToString());
+                    result.Append(table.Columns[i].ColumnName);
                     result.Append(i == table.Columns.Count - 1 ? "\n" : ";");
                 }
-            }
 
+                foreach (DataRow row in table.Rows)
+                {
+                    for (int i = 0; i < table.Columns.Count; i++)
+                    {
+                        result.Append(row[i].ToString());
+                        result.Append(i == table.Columns.Count - 1 ? "\n" : ";");
+                    }
+                }
+
+                //write to file
+                File.WriteAllText(path, result.ToString());
+
+                return true;
+            }
+            catch
+            {
+                
+            }
+            return false;
             //System.IO.File.WriteAllText(path, result.ToString());
         }
 
