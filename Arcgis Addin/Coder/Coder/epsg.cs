@@ -8,17 +8,11 @@ using RestSharp.Deserializers;
 
 namespace GeoCodingInterface
 {
-    class geometrydetails
+    class epsg
     {
-
-        [DeserializeAs(Name = "coordinates")]
-        public List<string> coordinates { get; set; }
-        [DeserializeAs(Name = "type")]
-        public string type { get; set; }
+        [DeserializeAs(Name = "epsg")]
+        public string epsgcode { get; set; }
 
 
     }
-
-
-    
 }

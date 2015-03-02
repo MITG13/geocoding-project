@@ -1,4 +1,5 @@
 ﻿using RestSharp;
+using RestSharp.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,60 +12,35 @@ namespace GeoCodingInterface
     class GeoCodingInterface
     {
 
-        private Uri uriAddress = new Uri("http://node.js");
 
 
-        public List<service> GetServices()
-        {
-
-            List<service> available = new List<service>();
-            var client = new RestClient();
-
-            client.BaseUrl = uriAddress;
-
-            var request = new RestRequest(Method.GET);
-
-            request.Resource = "rest?";
-            request.AddParameter("key", "value");
-
-            request.RequestFormat = DataFormat.Json;
-            
-            var response = client.Execute<serviceResponse>(request);
-
-            available = response.Data.service;
-
-            return available;
-            
-        }
-
-        public coordinates GetLatLng()
-        {
-
-            coordinates latlng = new coordinates();
-            var client = new RestClient();
-
-            client.BaseUrl = uriAddress;
-
-            var request = new RestRequest(Method.POST);
-
-            request.Resource = "rest?";
-            request.AddParameter("key", "value");
-
-            request.RequestFormat = DataFormat.Json;
-
-            var response = client.Execute<codingResponse>(request);
-
-            latlng = response.Data.latlng;
-
-            return latlng;
-
-        }
-
-        /*
         static void Main(string[] args)
         {
 
+
+
+            RestAPI test = new RestAPI();
+
+            servicelist providers = test.getServices();
+            codingObject myadress = new codingObject();
+
+            myadress.properties = new addressdata();
+            myadress.properties.address = "sonnbergstraße 58, 2380 Austria";
+
+            codingObject thoseCoords = test.getCoordinates(providers.providers[0], myadress);
+
+            myadress.geometry = new geometrydetails();
+            myadress.geometry.coordinates = new List<string>();
+            myadress.geometry.coordinates.Add("48.1263169");
+            myadress.geometry.coordinates.Add("16.2576945");
+
+            thoseCoords = test.getAdress(providers.providers[0], myadress);
+
+            Console.ReadKey();
+
+
+
         }
-        */
+
     }
 }
