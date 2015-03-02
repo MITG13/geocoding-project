@@ -23,7 +23,10 @@ using DotSpatial.Plugins.SimpleMap;
 using DotSpatial.Plugins.WebMap;
 using DotSpatial.Data;
 using DotSpatial.Topology;
-
+using RestSharp;
+using Newtonsoft;
+using GeoCodingInterface;
+using CSV_Plugin;
 
 namespace Geocoding
 {
@@ -33,59 +36,27 @@ namespace Geocoding
     public partial class MainWindow : Window
     {
         DataTable myDataTable;
+        RestAPI test;
+        servicelist providers;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            test = new RestAPI();
+            providers = test.getServices();
+            foreach (string prov in providers.providers)
+            {
+                ComboBoxProvider.Items.Add(prov);
+            }
+            ComboBoxProvider.SelectedIndex = 0;
             //map_dotNet.AddLayer();
             //FELIX TEST "CSV_Plugin"
             string currentDir = Environment.CurrentDirectory;
             DirectoryInfo directory = new DirectoryInfo(currentDir);
             string fullDirectory = directory.FullName;
-            //MessageBox.Show(fullDirectory);
             map_dotNet.Layers.Add(BruTileLayer.CreateBingHybridLayer());
-            //string fullFile = file.FullName;
-
-            //MessageBox.Show(CSV_Plugin.CSV.get100().ToString()); //nur eine methode zum testen die 100 als int wert liefert
-            //String testpath2 = "C:\\Temp\\GitHub\\geocoding-project\\Geocoding\\CSV_Plugin\\test.csv";
-            //String testpath = @"C:\Users\Ilja\Documents\git\Geocoding\CSV_Plugin\test.csv";
-
-            /*if (File.Exists(testpath))
-            {
-                //myDataTable = CSV_Plugin.CSV.importCSV(testpath);
-            }
-            else
-            {
-                MessageBox.Show("File does not exist: " + testpath);
-            }*/
-
-
-            //ILJA
-            /*DataTable myDataTable = new DataTable();
-            var comboColumn = new DataGridComboBoxColumn();
-            comboColumn.Header = new ComboBox();
-
-            myDataTable.Columns.Add("Column A");
-            myDataTable.Columns.Add("Column B");
-
-            // Add some rows to the DataTable.
-            myDataTable.Rows.Add("A1", "B1");
-            myDataTable.Rows.Add("A2", "B2");
-            myDataTable.Rows.Add("A3", "B3");*/
-
-            // Bind DataTable to DataGrid.
-
-            //grid1.ItemsSource = myDataTable.DefaultView;
-
-            //grid1.Columns[0].Header = comboColumn;
-
-
-
-            //string path = System.Reflection.Assembly.GetCallingAssembly().CodeBase.ToString();
             string path = System.IO.Directory.GetCurrentDirectory();
-            //MessageBox.Show(ShapePlg.test_shape(path));
-            // add onclick listeners for import, export, geocode
         }
 
         private void open_Dialog()
@@ -111,14 +82,12 @@ namespace Geocoding
                             break;
                         case ".csv":
                             //code for CSV export
-                            myDataTable = CSV_Plugin.CSV.importCSV(openFileDialog1.FileName);
-                            // CSV_Plugin.CSV.importCSV(@"C:\Users\Ilja\Documents\testexport.csv");
+                            myDataTable = CSV.importCSV(openFileDialog1.FileName);
                             grid1.ItemsSource = myDataTable.DefaultView;
                             break;
                         default:
                             break;
                     }
-                    //openFileDialog1.FileName;
                 }
             }
             catch (Exception ex)
@@ -150,15 +119,19 @@ namespace Geocoding
                             {
                                 MessageBox.Show("Shapefile created!");
                             }
-                            else MessageBox.Show("Table is empty!");                            
+                            else MessageBox.Show("Table is empty!");
                             break;
                         case ".csv":
                             //code for CSV export
+                            if (CSV.exportCSV(myDataTable, saveFileDialog1.FileName))
+                            {
+                                MessageBox.Show("CSV created!");
+                            }
+                            else MessageBox.Show("Table is empty!");
                             break;
                         default:
                             break;
                     }
-                    //saveFileDialog1.FileName;
                 }
             }
             catch (Exception ex)
@@ -180,8 +153,6 @@ namespace Geocoding
         }
         public static DataTable DataGridtoDataTable(DataGrid dg)
         {
-
-
             dg.SelectAllCells();
             dg.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
             ApplicationCommands.Copy.Execute(null, dg);
@@ -207,42 +178,17 @@ namespace Geocoding
                 dt.Rows.Add(Row);
             }
             return dt;
-
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void GeocodeClick(object sender, RoutedEventArgs e)
         {
-            foreach (DataRow raw in myDataTable.Rows)
-            {               
-                object[] allValues = raw.ItemArray;
-                String allValuesInString = "";
-                for (int i = 0; i < allValues.Length; i++)
-                {
-                    allValuesInString += allValues[i] + ", ";
-                }
-                //MessageBox.Show(allValuesInString);
-                
-            }
-            //myDataTable.Rows[2]["STREET"] = "yoyoyo";
-
-            myDataTable.Columns.Add("x", typeof(String));
-            myDataTable.Columns.Add("y", typeof(String));
-           
             FeatureSet _myPoints = new FeatureSet(FeatureType.Point);
-            // Randomly generate 10 points that are in the map extent
-            Random rnd = new Random();
-            for (int i = 0; i < 4; i++)
-            {
-                double x = rnd.NextDouble() * (50 - 10);
-                double y = rnd.NextDouble() * (50 - 10);
-                Coordinate c = new Coordinate(x, y);
-                _myPoints.Features.Add(c);
 
-                myDataTable.Rows[i]["x"] = x.ToString();
-                myDataTable.Rows[i]["y"] = y.ToString();
+            if (CheckBoxReverse.IsChecked == false)
+            {
+                normalGeocoder(_myPoints);
             }
-            grid1.ItemsSource = null;
-            grid1.ItemsSource = myDataTable.DefaultView;
+            else reverseGeocoder(_myPoints);
 
             IMapPointLayer pointLayer = map_dotNet.Layers.Add(_myPoints) as IMapPointLayer;
             if (pointLayer != null)
@@ -250,7 +196,95 @@ namespace Geocoding
                 map_dotNet.ViewExtents = pointLayer.DataSet.Extent;
             }
 
+            grid1.ItemsSource = null;
+            grid1.ItemsSource = myDataTable.DefaultView;
+        }
 
+        public void normalGeocoder(FeatureSet _myPoints)
+        {
+            foreach (DataRow raw in myDataTable.Rows)
+            {
+                object[] allValues = raw.ItemArray;
+                String allValuesInString = "";
+                for (int i = 0; i < allValues.Length; i++)
+                {
+                    allValuesInString += allValues[i] + ", ";
+                }
+                //MessageBox.Show(allValuesInString);
+                codingObject myadress = new codingObject();
+                myadress.properties = new addressdata();
+                //myadress.properties.address = "Sonnbergstraße 58, 2380 Perchtoldsdorf, Austria";
+                myadress.properties.address = allValuesInString;
+
+                codingObject thoseCoords = test.getCoordinates(ComboBoxProvider.SelectedItem.ToString(), myadress);
+
+                //MessageBox.Show(allValuesInString);  
+
+                //myDataTable.Rows[2]["STREET"] = "yoyoyo";
+                if (!myDataTable.Columns.Contains("x"))
+                {
+                    myDataTable.Columns.Add("x", typeof(String));
+                }
+                if (!myDataTable.Columns.Contains("y"))
+                {
+                    myDataTable.Columns.Add("y", typeof(String));
+                }
+
+                if (thoseCoords.geometry != null)
+                {
+                    //MessageBox.Show("x: " + thoseCoords.geometry.coordinates.First().ToString()
+                    // + " y: " + thoseCoords.geometry.coordinates[1].ToString());
+                    double x = Convert.ToDouble(thoseCoords.geometry.coordinates[0]);
+                    double y = Convert.ToDouble(thoseCoords.geometry.coordinates[1]);
+                    Coordinate c = new Coordinate(x, y);
+                    _myPoints.Features.Add(c);
+                    raw["x"] = x.ToString();
+                    raw["y"] = y.ToString();
+                }
+            }
+
+        }
+
+
+        public void reverseGeocoder(FeatureSet _myPoints)
+        {
+            if (myDataTable.Columns.Contains("x") && myDataTable.Columns.Contains("y") ||
+                myDataTable.Columns.Contains("lon") && myDataTable.Columns.Contains("lat"))
+            {
+                foreach (DataRow raw in myDataTable.Rows)
+                {
+                    codingObject myadress = new codingObject();
+                    myadress.properties = new addressdata();
+                    myadress.geometry = new geometrydetails();
+                    myadress.geometry.coordinates = new List<string>();
+
+                    if (raw["x"] != null && myDataTable.Columns.Contains("x"))
+                    {
+                        myadress.geometry.coordinates.Add(raw["x"].ToString().Replace(',', '.'));
+                    }
+                    if (raw["y"] != null && myDataTable.Columns.Contains("y"))
+                    {
+                        myadress.geometry.coordinates.Add(raw["y"].ToString().Replace(',', '.'));
+                    }
+                    codingObject thoseCoords = test.getAdress(providers.providers[0], myadress);
+
+
+                    if (!myDataTable.Columns.Contains("adress"))
+                    {
+                        myDataTable.Columns.Add("adress", typeof(String));
+                    }
+
+                    if (thoseCoords.properties != null)
+                    {
+                        double x = Convert.ToDouble(thoseCoords.geometry.coordinates[0]);
+                        double y = Convert.ToDouble(thoseCoords.geometry.coordinates[1]);
+                        Coordinate c = new Coordinate(x, y);
+                        _myPoints.Features.Add(c);
+                        raw["adress"] = thoseCoords.properties.address;
+                    }
+                }
+            }
+            else MessageBox.Show("Keine Koordinaten vorhanden");
         }
     }
 }
