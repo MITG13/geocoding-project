@@ -28,6 +28,7 @@ namespace GeoCodingInterface
             {
                 const string message = "Somthing went terribly wrong with your request";
                 var apiException = new ApplicationException(message, response.ErrorException);
+                MessageBox.Show("No Data found");
                 throw apiException;
             }
 
