@@ -54,13 +54,17 @@ function parseJSON(body) {
     if (typeof(body) === 'string') {
         body = JSON.parse(body);
     }
-
+    console.log(body);
     if (body.length === 0) {
         return {
             errors: ['No address found!']
         };
     } else {
-        var result = body[0];
+        var result = body;
+        if (body[0] !== undefined) {
+            result = body[0];
+        }
+        
 
         var props = {
             country: null,
@@ -118,7 +122,7 @@ function parseJSON(body) {
             },
             "geometry": {
                 "type": "Point",
-                "coordinates": [result.lat, result.lon]
+                "coordinates": [parseFloat(result.lat), parseFloat(result.lon)]
             },
             "epsg": "EPSG:4326"
         };
