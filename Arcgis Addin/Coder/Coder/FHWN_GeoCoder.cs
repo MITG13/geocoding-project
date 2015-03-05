@@ -18,10 +18,7 @@ using GeoCodingInterface;
 
 namespace Coder
 {
-    /// <summary>
-    /// Designer class of the dockable window add-in. It contains user interfaces that
-    /// make up the dockable window.
-    /// </summary>
+    // Klasse für den andockbaren Dialog zum Geocoden.
     public partial class FHWN_GeoCoder : UserControl
     {
 
@@ -32,19 +29,12 @@ namespace Coder
             this.Hook = hook;
         }
 
-        /// <summary>
-        /// Host object of the dockable window
-        /// </summary>
         private object Hook
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Implementation class of the dockable window add-in. It is responsible for 
-        /// creating and disposing the user interface class of the dockable window.
-        /// </summary>
         public class AddinImpl : ESRI.ArcGIS.Desktop.AddIns.DockableWindow
         {
             private FHWN_GeoCoder m_windowUI;
@@ -57,9 +47,6 @@ namespace Coder
             {
                 m_windowUI = new FHWN_GeoCoder(this.Hook);
                 return m_windowUI.Handle;
-
-                 
-
             }
 
             protected override void Dispose(bool disposing)
@@ -100,6 +87,7 @@ namespace Coder
         {
             string adress = txt_address.Text;
 
+            // API initialisieren und Requestmethode aufrufen
             RestAPI request = new RestAPI();
             codingObject myadress = new codingObject();
 
@@ -111,10 +99,12 @@ namespace Coder
             txt_lat.Clear();
             txt_lng.Clear();
 
-            txt_lat.Text = thoseCoords.geometry.coordinates[0];
-            txt_lng.Text = thoseCoords.geometry.coordinates[1];
+            // Textboxen befüllen
+            txt_lat.Text = thoseCoords.geometry.coordinates[0].Replace(".", ",");
+            txt_lng.Text = thoseCoords.geometry.coordinates[1].Replace(".", ",");
 
-            drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[1]), Convert.ToDouble(thoseCoords.geometry.coordinates[0]));
+            // Punkt in der Karte anzeigen
+            drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[1].Replace(".", ",")), Convert.ToDouble(thoseCoords.geometry.coordinates[0].Replace(".", ",")));
 
         }
 
@@ -122,17 +112,17 @@ namespace Coder
         private void drawAddressPoint(double lat, double lng)
         {
 
+            // Punktgeometrie initialisieren
             IPoint address = new PointClass();
 
+            // aktive Map und View
             IMxDocument mxdoc = ArcMap.Application.Document as IMxDocument;
             IActiveView activeView = mxdoc.ActivatedView;
-
             IMap map = mxdoc.FocusMap;
-
             IEnvelope envelope = activeView.Extent;
 
+            // WGS 84 Referenzsystem initialisieren um es dem Punkt zuordnen zu können
             ISpatialReferenceFactory spatialRefereceFactory = new SpatialReferenceEnvironmentClass();
-
             IGeographicCoordinateSystem geographicCoordinateSystem = spatialRefereceFactory.CreateGeographicCoordinateSystem((int)esriSRGeoCSType.esriSRGeoCS_WGS1984);
             ISpatialReference spatialReference = geographicCoordinateSystem;
 
@@ -140,26 +130,23 @@ namespace Coder
             short screenCache = Convert.ToInt16(esriScreenCache.esriNoScreenCache);
 
             address.SpatialReference = spatialReference;
-            address.PutCoords(lat, lng);
-
+            address.PutCoords(lat, lng); // Koordinaten zuweisen
 
             ISpatialReference outgoingCoordSystem = map.SpatialReference;
-            //IDisplayTransformation datumConversion = ((IActiveView)map).ScreenDisplay.DisplayTransformation.TransformCoords;
             address.Project(outgoingCoordSystem);
 
+            // Grafische Gestaltung für den Punkt
             IRgbColor color = new RgbColorClass();
             color.Green = 80;
             color.Red = 22;
             color.Blue = 68;
 
-            IGraphicsContainer graphicsContainer = map as IGraphicsContainer;
-
-            IElement element = null;
-
             ISimpleMarkerSymbol simpleMarkerSymbol = new SimpleMarkerSymbol();
             simpleMarkerSymbol.Color = color;
             simpleMarkerSymbol.Size = 15;
             simpleMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSCircle;
+            
+            IElement element = null;
 
             IMarkerElement markerElement = new MarkerElementClass();
 
@@ -169,23 +156,25 @@ namespace Coder
             if (!(element == null))
                 {
                     element.Geometry = address;
-                    //graphicsContainer.AddElement(element, 0);
                 }
 
+            // Punkt dem temporären Layer zuweisen
             IGraphicsLayer graphicsLayer = new CompositeGraphicsLayerClass();
             ((ILayer)graphicsLayer).Name = "Flashy Coordinates Layer";
             ((ILayer)graphicsLayer).SpatialReference = spatialReference;
-            (graphicsLayer as IGraphicsContainer).AddElement(element, 0);
-            //map.AddLayer(graphicsLayer as ILayer);  
+            (graphicsLayer as IGraphicsContainer).AddElement(element, 0); 
 
+            // Aufflashen via Snippet
             FlashGeometry(address, color, mxdoc.ActiveView.ScreenDisplay, 500);
 
+            // auf Punkt hinzommen
             envelope.CenterAt(address);
             activeView.Extent = envelope;
             activeView.Refresh();
 
         }
 
+        // Snippet
         public void FlashGeometry(ESRI.ArcGIS.Geometry.IGeometry geometry, ESRI.ArcGIS.Display.IRgbColor color, ESRI.ArcGIS.Display.IDisplay display, System.Int32 delay)
         {
             if (geometry == null || color == null || display == null)
@@ -277,6 +266,7 @@ namespace Coder
             string lat = txt_lat.Text ;
             string lng = txt_lng.Text;
 
+            // API initialisieren und Requestmethode aufrufen
             RestAPI request = new RestAPI();
             codingObject myadress = new codingObject();
 
@@ -291,8 +281,10 @@ namespace Coder
 
             txt_address.Clear();
 
+            // Text im Feld eintragen
             txt_address.Text = thoseCoords.properties.address;
 
+            // Zeichne den Punkt auf der Map ein
             drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[1]), Convert.ToDouble(thoseCoords.geometry.coordinates[0]));
 
 

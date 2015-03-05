@@ -10,6 +10,7 @@ using ESRI.ArcGIS.Framework;
 
 namespace Coder
 {
+    //Klasse für den AddIn Button in der Toolbar
     public class ArcGISAddin1 : ESRI.ArcGIS.Desktop.AddIns.Button
     {
         public ArcGISAddin1()
@@ -21,7 +22,7 @@ namespace Coder
             UID dockWinID = new UIDClass();
             dockWinID.Value = ThisAddIn.IDs.FHWN_GeoCoder;
 
-            // Use GetDockableWindow directly as we want the client IDockableWindow not the internal class  
+            // Ruft das Docable Window auf
             IDockableWindow dockWindow = ArcMap.DockableWindowManager.GetDockableWindow(dockWinID);
             dockWindow.Show(true);  
 
