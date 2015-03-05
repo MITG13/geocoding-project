@@ -118,7 +118,7 @@ function parseJSON(body) {
             },
             "geometry": {
                 "type": "Point",
-                "coordinates": [result.lat, result.lon]
+                "coordinates": [parseFloat(result.lat), parseFloat(result.lon)]
             },
             "epsg": "EPSG:4326"
         };
