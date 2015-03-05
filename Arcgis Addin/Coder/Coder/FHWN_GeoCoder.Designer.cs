@@ -31,13 +31,14 @@
             this.txt_address = new System.Windows.Forms.TextBox();
             this.lbl_about = new System.Windows.Forms.Label();
             this.cmb_geocoder = new System.Windows.Forms.ComboBox();
-            this.btn_geocode = new System.Windows.Forms.Button();
             this.lbl_result = new System.Windows.Forms.Label();
             this.lbl_lat = new System.Windows.Forms.Label();
             this.lbl_lng = new System.Windows.Forms.Label();
             this.txt_lat = new System.Windows.Forms.TextBox();
             this.txt_lng = new System.Windows.Forms.TextBox();
+            this.btn_rev = new System.Windows.Forms.Button();
             this.pic_logo = new System.Windows.Forms.PictureBox();
+            this.btn_geocode = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pic_logo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,24 +67,14 @@
             this.cmb_geocoder.TabIndex = 2;
             this.cmb_geocoder.Text = "Choose Geocoder";
             // 
-            // btn_geocode
-            // 
-            this.btn_geocode.Location = new System.Drawing.Point(15, 121);
-            this.btn_geocode.Name = "btn_geocode";
-            this.btn_geocode.Size = new System.Drawing.Size(121, 23);
-            this.btn_geocode.TabIndex = 3;
-            this.btn_geocode.Text = "Geocode Address";
-            this.btn_geocode.UseVisualStyleBackColor = true;
-            this.btn_geocode.Click += new System.EventHandler(this.btn_geocode_Click);
-            // 
             // lbl_result
             // 
             this.lbl_result.AutoSize = true;
             this.lbl_result.Location = new System.Drawing.Point(15, 188);
             this.lbl_result.Name = "lbl_result";
-            this.lbl_result.Size = new System.Drawing.Size(40, 13);
+            this.lbl_result.Size = new System.Drawing.Size(67, 13);
             this.lbl_result.TabIndex = 4;
-            this.lbl_result.Text = "Result:";
+            this.lbl_result.Text = "Koordinaten:";
             // 
             // lbl_lat
             // 
@@ -117,6 +108,17 @@
             this.txt_lng.Size = new System.Drawing.Size(217, 20);
             this.txt_lng.TabIndex = 8;
             // 
+            // btn_rev
+            // 
+            this.btn_rev.BackgroundImage = global::Coder.Properties.Resources.arrowsups;
+            this.btn_rev.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_rev.Location = new System.Drawing.Point(79, 123);
+            this.btn_rev.Name = "btn_rev";
+            this.btn_rev.Size = new System.Drawing.Size(57, 51);
+            this.btn_rev.TabIndex = 10;
+            this.btn_rev.UseVisualStyleBackColor = true;
+            this.btn_rev.Click += new System.EventHandler(this.btn_rev_Click);
+            // 
             // pic_logo
             // 
             this.pic_logo.Image = global::Coder.Properties.Resources.icon_sm;
@@ -128,8 +130,20 @@
             this.pic_logo.TabIndex = 9;
             this.pic_logo.TabStop = false;
             // 
+            // btn_geocode
+            // 
+            this.btn_geocode.BackgroundImage = global::Coder.Properties.Resources.arrowsdowns;
+            this.btn_geocode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_geocode.Location = new System.Drawing.Point(15, 123);
+            this.btn_geocode.Name = "btn_geocode";
+            this.btn_geocode.Size = new System.Drawing.Size(57, 51);
+            this.btn_geocode.TabIndex = 3;
+            this.btn_geocode.UseVisualStyleBackColor = true;
+            this.btn_geocode.Click += new System.EventHandler(this.btn_geocode_Click);
+            // 
             // FHWN_GeoCoder
             // 
+            this.Controls.Add(this.btn_rev);
             this.Controls.Add(this.pic_logo);
             this.Controls.Add(this.txt_lng);
             this.Controls.Add(this.txt_lat);
@@ -161,6 +175,7 @@
         private System.Windows.Forms.TextBox txt_lat;
         private System.Windows.Forms.TextBox txt_lng;
         private System.Windows.Forms.PictureBox pic_logo;
+        private System.Windows.Forms.Button btn_rev;
 
     }
 }

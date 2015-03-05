@@ -6,7 +6,7 @@
   <Image>Images\Coder.png</Image>
   <Author>karin</Author>
   <Company></Company>
-  <Date>10.01.2015</Date>
+  <Date>04.03.2015</Date>
   <Targets>
     <Target name="Desktop" version="10.2" />
   </Targets>

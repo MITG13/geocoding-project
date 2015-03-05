@@ -183,6 +183,21 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrowsdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrowsdowns.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrowsups.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\Point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AddInContent Include="Images\Point.cur" />
+  </ItemGroup>
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
     <AddInTargetProduct>Desktop</AddInTargetProduct>

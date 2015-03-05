@@ -72,6 +72,7 @@ namespace Coder
 
         }
 
+        // get Providers and put them nicely in the Drop Down Menue. Preselect one.
         private void getProviders() {
 
             RestAPI requester = new RestAPI();
@@ -86,6 +87,7 @@ namespace Coder
         
         }
 
+        // Fill on Load
         private void dockWindow_load(object sender, EventArgs e)
         {
             // Code to get List of Geocoders goes here:
@@ -93,6 +95,7 @@ namespace Coder
 
         }
 
+        // Forward Geocoding
         private void btn_geocode_Click(object sender, EventArgs e)
         {
             string adress = txt_address.Text;
@@ -111,10 +114,11 @@ namespace Coder
             txt_lat.Text = thoseCoords.geometry.coordinates[0];
             txt_lng.Text = thoseCoords.geometry.coordinates[1];
 
-            drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[0]), Convert.ToDouble(thoseCoords.geometry.coordinates[0]));
+            drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[1]), Convert.ToDouble(thoseCoords.geometry.coordinates[0]));
 
         }
 
+        //Drawing Points and Stuff
         private void drawAddressPoint(double lat, double lng)
         {
 
@@ -169,7 +173,7 @@ namespace Coder
                 }
 
             IGraphicsLayer graphicsLayer = new CompositeGraphicsLayerClass();
-            ((ILayer)graphicsLayer).Name = "New Layer";
+            ((ILayer)graphicsLayer).Name = "Flashy Coordinates Layer";
             ((ILayer)graphicsLayer).SpatialReference = spatialReference;
             (graphicsLayer as IGraphicsContainer).AddElement(element, 0);
             //map.AddLayer(graphicsLayer as ILayer);  
@@ -264,6 +268,34 @@ namespace Coder
                     }
             }
             display.FinishDrawing();
+        }
+
+        // reverse Geocoding
+        private void btn_rev_Click(object sender, EventArgs e)
+        {
+
+            string lat = txt_lat.Text ;
+            string lng = txt_lng.Text;
+
+            RestAPI request = new RestAPI();
+            codingObject myadress = new codingObject();
+
+            myadress.properties = new addressdata();
+
+            myadress.geometry = new geometrydetails();
+            myadress.geometry.coordinates = new List<string>();
+            myadress.geometry.coordinates.Add(lat);
+            myadress.geometry.coordinates.Add(lng);
+
+            codingObject thoseCoords = request.getAdress(cmb_geocoder.SelectedItem.ToString(), myadress);
+
+            txt_address.Clear();
+
+            txt_address.Text = thoseCoords.properties.address;
+
+            drawAddressPoint(Convert.ToDouble(thoseCoords.geometry.coordinates[1]), Convert.ToDouble(thoseCoords.geometry.coordinates[0]));
+
+
         }
 
     }
