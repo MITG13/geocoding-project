@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Serializers;
 using Newtonsoft.Json;
-using System.Windows.Forms;
 
 namespace GeoCodingInterface
 {
@@ -18,6 +17,7 @@ namespace GeoCodingInterface
 
         public RestAPI() {
         }
+
 
         public T Execute<T>(RestRequest request) where T : new()
         {
@@ -31,7 +31,6 @@ namespace GeoCodingInterface
             {
                 const string message = "Somthing went terribly wrong with your request";
                 var apiException = new ApplicationException(message, response.ErrorException);
-                MessageBox.Show("No Data found");
                 throw apiException;
             }
 
@@ -77,7 +76,7 @@ namespace GeoCodingInterface
             request.Resource = "/getAddress";
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddParameter("provider", provider); // Provider wird direkt übermittelt
-            request.AddParameter("geometry", JsonConvert.SerializeObject(adressobject.geometry));  // es wird nur das Geometry'objekt' übermittelt
+            request.AddParameter("geometry", JsonConvert.SerializeObject(adressobject.geometry)); // es wird nur das Geometry'objekt' übermittelt
             request.RequestFormat = DataFormat.Json;
 
             codingObject codinglist = Execute<codingObject>(request);

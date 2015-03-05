@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeoCodingInterface
 {
-
+    
     // Klasse für das deserialisieren des ganzen JSON Objects. Entspricht dem zurückgelieferten Objekt der getAdress bzw. getCoordinates Request
     class codingObject
     {

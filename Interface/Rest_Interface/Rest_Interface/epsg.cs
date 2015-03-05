@@ -8,7 +8,6 @@ using RestSharp.Deserializers;
 
 namespace GeoCodingInterface
 {
-    // Klasse entspricht den Parametern des EPSG Objects das vom REST zurückgeliefert wird.
     class epsg
     {
         [DeserializeAs(Name = "epsg")]
