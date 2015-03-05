@@ -27,6 +27,7 @@ using RestSharp;
 using Newtonsoft;
 using GeoCodingInterface;
 using CSV_Plugin;
+using DotSpatial.Projections;
 
 namespace Geocoding
 {
@@ -50,15 +51,10 @@ namespace Geocoding
                 ComboBoxProvider.Items.Add(prov);
             }
             ComboBoxProvider.SelectedIndex = 0;
-            //map_dotNet.AddLayer();
-            //FELIX TEST "CSV_Plugin"
-            string currentDir = Environment.CurrentDirectory;
-            DirectoryInfo directory = new DirectoryInfo(currentDir);
-            string fullDirectory = directory.FullName;
-            map_dotNet.Layers.Add(BruTileLayer.CreateBingHybridLayer());
-            string path = System.IO.Directory.GetCurrentDirectory();
-        }
 
+            map_dotNet.Layers.Add(BruTileLayer.CreateOsmLayer());
+        }
+        
         private void open_Dialog()
         {
             // do it with onclick event
@@ -88,6 +84,11 @@ namespace Geocoding
                         default:
                             break;
                     }
+                }
+                IMapFeatureLayer[] layers = map_dotNet.GetFeatureLayers();
+                foreach (IMapFeatureLayer layer in layers)
+                {
+                    layer.DataSet.Features.Clear();
                 }
             }
             catch (Exception ex)
@@ -183,6 +184,8 @@ namespace Geocoding
         private void GeocodeClick(object sender, RoutedEventArgs e)
         {
             FeatureSet _myPoints = new FeatureSet(FeatureType.Point);
+            _myPoints.Projection = KnownCoordinateSystems.Geographic.World.WGS1984;
+            _myPoints.Projection.IsLatLon = true;
 
             if (CheckBoxReverse.IsChecked == false)
             {
@@ -191,13 +194,20 @@ namespace Geocoding
             else reverseGeocoder(_myPoints);
 
             IMapPointLayer pointLayer = map_dotNet.Layers.Add(_myPoints) as IMapPointLayer;
+            pointLayer.Projection = KnownCoordinateSystems.Geographic.World.WGS1984; ;
+            pointLayer = map_dotNet.Layers.Add(_myPoints) as IMapPointLayer;
+  
             if (pointLayer != null)
             {
+               
+                pointLayer.DataSet.Extent.ExpandBy(200);                                
                 map_dotNet.ViewExtents = pointLayer.DataSet.Extent;
+                //map_dotNet.Refresh();
             }
 
             grid1.ItemsSource = null;
             grid1.ItemsSource = myDataTable.DefaultView;
+
         }
 
         public void normalGeocoder(FeatureSet _myPoints)
@@ -234,12 +244,13 @@ namespace Geocoding
                 {
                     //MessageBox.Show("x: " + thoseCoords.geometry.coordinates.First().ToString()
                     // + " y: " + thoseCoords.geometry.coordinates[1].ToString());
-                    double x = Convert.ToDouble(thoseCoords.geometry.coordinates[0]);
-                    double y = Convert.ToDouble(thoseCoords.geometry.coordinates[1]);
+                    double x = Convert.ToDouble(thoseCoords.geometry.coordinates[0].Replace('.', ','));
+                    double y = Convert.ToDouble(thoseCoords.geometry.coordinates[1].Replace('.', ','));
                     Coordinate c = new Coordinate(x, y);
-                    _myPoints.Features.Add(c);
-                    raw["x"] = x.ToString();
-                    raw["y"] = y.ToString();
+
+                    _myPoints.Features.Add(GlobalMercator.LatLonToMeters(x,y));
+                    raw["x"] = thoseCoords.geometry.coordinates[0];
+                    raw["y"] = thoseCoords.geometry.coordinates[1];
                 }
             }
 
@@ -278,8 +289,8 @@ namespace Geocoding
                     {
                         double x = Convert.ToDouble(thoseCoords.geometry.coordinates[0]);
                         double y = Convert.ToDouble(thoseCoords.geometry.coordinates[1]);
-                        Coordinate c = new Coordinate(x, y);
-                        _myPoints.Features.Add(c);
+                        //Coordinate c = new Coordinate(x, y);
+                        _myPoints.Features.Add(GlobalMercator.LatLonToMeters(x, y));
                         raw["adress"] = thoseCoords.properties.address;
                     }
                 }

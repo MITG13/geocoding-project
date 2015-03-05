@@ -45,8 +45,9 @@
     <Reference Include="CSV_Plugin">
       <HintPath>..\CSV_Plugin\bin\Debug\CSV_Plugin.dll</HintPath>
     </Reference>
-    <Reference Include="DotSpatial.Controls">
-      <HintPath>..\packages\DotSpatial.Controls.1.7\lib\net40-Client\DotSpatial.Controls.dll</HintPath>
+    <Reference Include="DotSpatial.Controls, Version=1.7.0.0, Culture=neutral, PublicKeyToken=4d9e49339a7d240c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\DotSpatial.Controls\DotSpatial.Controls.dll</HintPath>
     </Reference>
     <Reference Include="DotSpatial.Data, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c29dbf30e059ca9d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -98,11 +99,6 @@
     <Reference Include="RestSharp">
       <HintPath>.\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Rest_Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Rest_Interface.dll</HintPath>
-      <Aliases>RestDll</Aliases>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -129,6 +125,7 @@
     <Compile Include="codingresponse.cs" />
     <Compile Include="coordinates.cs" />
     <Compile Include="epsg.cs" />
+    <Compile Include="GlobalMercator.cs" />
     <Compile Include="requestParameter.cs" />
     <Compile Include="RestAPI.cs" />
     <Compile Include="service.cs" />
