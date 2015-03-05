@@ -214,12 +214,19 @@ namespace Geocoding
         {
             foreach (DataRow raw in myDataTable.Rows)
             {
-                object[] allValues = raw.ItemArray;
                 String allValuesInString = "";
-                for (int i = 0; i < allValues.Length; i++)
+
+                foreach (DataColumn column in myDataTable.Columns)
                 {
-                    allValuesInString += allValues[i] + ", ";
+                    string columnname = column.ColumnName;
+                    object columndata = raw[column].ToString();
+                    if (columnname != "x" && columnname != "y" && columnname != "adress")
+                    {
+                        allValuesInString += columndata + ", ";
+                    }
+                    
                 }
+                
                 //MessageBox.Show(allValuesInString);
                 codingObject myadress = new codingObject();
                 myadress.properties = new addressdata();
